@@ -1,0 +1,61 @@
+.playlist-create {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 45px;
+}
+
+.playlist-text {
+  background-color: lightblue;
+  height: 25px;
+  width: 150px;
+  text-align: center;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.datatable {
+  margin-top: 150px;
+}
+
+.playlist-input {
+  display: block;
+  position: absolute;
+  top: 150px;
+}
+
+.playlist-input-sub {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  padding: 10px;
+  box-shadow: 0px 0px 10px 3px lightblue;
+  border: none;
+}
+
+.playlist-input-sub > label {
+  text-align: center;
+}
+
+.playlist-input-sub > input {
+  border: 1px solid lightblue;
+}
+
+.playlist-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.playlist-button {
+  margin-top: 5px;
+}
+
+.playlist-button > button {
+  border-radius: 5px;
+  height: 30px;
+  width: 55px;
+  justify-content: center;
+  text-align: center;
+  background-color: lightblue;
+  border: 1px solid rgb(125, 207, 234);
+  color: white;
+}
