@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ThreeCircles } from "react-loader-spinner";
 import DataTable, { defaultThemes } from "react-data-table-component";
-import { Tooltip } from "bootstrap";
 import Header from "../../components/header/header";
 import "./playlist.css";
 
@@ -114,32 +113,11 @@ const Playlist = () => {
   };
 
   return (
-    <>
+    <div>
       <Header />
-      <div className="container">
-        <div>
-          <div className="playlist-create">
-            <div className="playlist-text" onClick={() => setPlaylistModel(true)}>
-              <span>Create New Playlist</span>
-            </div>
-            {playlistModel && (
-              <div className="playlist-input">
-                <div className="playlist-input-sub">
-                  <label htmlFor="name">Enter Playlist Name</label>
-                  <input type="text" />
-                  <div className="playlist-buttons">
-                    <div className="playlist-button">
-                      <button>save</button>
-                    </div>
-                    <div className="playlist-button" onClick={() => setPlaylistModel(false)}>
-                      <button>cancle</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-          <div className="datatable">
+      <div className="container-home-page">
+        <div className="temporaray-container">
+          <div className="container-content-table">
             <DataTable
               columns={columns}
               data={data}
@@ -148,7 +126,9 @@ const Playlist = () => {
                 marginTop: "-3rem",
               }}
               progressPending={isLoaderVisible}
-              progressComponent={<ThreeCircles color="#334D52" height={30} width={30} />}
+              progressComponent={
+                <ThreeCircles color="#334D52" height={30} width={30} />
+              }
               highlightOnHover
               pagination
               paginationServer
@@ -166,7 +146,7 @@ const Playlist = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default Playlist;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ThreeCircles } from "react-loader-spinner";
 import DataTable, { defaultThemes } from "react-data-table-component";
-import { Tooltip } from "bootstrap";
+// import { Tooltip } from "bootstrap";
 import Header from "../../components/header/header";
 import "./home.css";
 
@@ -46,7 +46,7 @@ const Home = () => {
       name: "sahil",
     },
   ];
-  
+
   const columns = [
     {
       name: "SNo",
@@ -112,36 +112,40 @@ const Home = () => {
   };
 
   return (
-    <>
+    <div>
       <Header />
-      <div className="container">
-        <div>
-          <DataTable
-            columns={columns}
-            data={data}
-            customStyles={customStyles}
-            style={{
-              marginTop: "-3rem",
-            }}
-            progressPending={isLoaderVisible}
-            progressComponent={<ThreeCircles color="#334D52" height={30} width={30} />}
-            highlightOnHover
-            pagination
-            paginationServer
-            paginationTotalRows={count}
-            paginationPerPage={countPerPage}
-            paginationRowsPerPageOptions={[10, 20, 25, 50, 100]}
-            paginationDefaultPage={page}
-            onChangePage={(page) => {
-              setPage(page);
-            }}
-            onChangeRowsPerPage={(rowPerPage) => {
-              setCountPerPage(rowPerPage);
-            }}
-          />
+      <div className="container-home-page">
+        <div className="temporaray-container">
+          <div className="container-content-table">
+            <DataTable
+              columns={columns}
+              data={data}
+              customStyles={customStyles}
+              style={{
+                marginTop: "-3rem",
+              }}
+              progressPending={isLoaderVisible}
+              progressComponent={
+                <ThreeCircles color="#334D52" height={30} width={30} />
+              }
+              highlightOnHover
+              pagination
+              paginationServer
+              paginationTotalRows={count}
+              paginationPerPage={countPerPage}
+              paginationRowsPerPageOptions={[10, 20, 25, 50, 100]}
+              paginationDefaultPage={page}
+              onChangePage={(page) => {
+                setPage(page);
+              }}
+              onChangeRowsPerPage={(rowPerPage) => {
+                setCountPerPage(rowPerPage);
+              }}
+            />
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
