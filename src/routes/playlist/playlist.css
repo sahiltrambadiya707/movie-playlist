@@ -5,6 +5,8 @@
   justify-content: center;
   align-items: center;
   padding: 30px 0;
+  position: relative;
+  overflow-x: hidden;
 }
 
 .temporaray-container {
@@ -34,4 +36,86 @@ button {
   background: gray;
   border: none;
   color: #fff;
+}
+.create-playlist-pop-up {
+  position: absolute;
+  top: 1.5%;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  height: 7vh;
+  box-shadow: 0px 0px 15px black;
+  border-radius: 10px 0px 0px 10px;
+  animation: slide-right 0.5s ease-in-out 1 forwards;
+}
+
+.create-playlist-pop-up .arrow-icon {
+  width: 35px;
+  height: 35px;
+  margin: 0 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  cursor: pointer;
+  color: rgb(75, 75, 75);
+  animation: arrow-rotate 0.5s ease-in-out 1 forwards reverse;
+}
+
+.playlist-name-input input,
+.playlist-name-input input:focus {
+  border: 0;
+  width: 150px;
+  border-bottom: 1px solid black;
+  margin: 0 1px;
+  outline: 0;
+}
+
+.add-icon {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 23px;
+  margin: 0 1px;
+  cursor: pointer;
+}
+
+#true {
+  animation: slide-left 0.5s ease-in-out 1 forwards;
+}
+
+#arrow-true {
+  animation: arrow-rotate 0.5s ease-in-out 1 forwards;
+}
+
+/* //////////////////////////////////////Animation///////////////////////////////////////////////// */
+
+@keyframes slide-left {
+  0% {
+    transform: translateX(89%);
+  }
+
+  100% {
+    transform: translateX(0px);
+  }
+}
+
+@keyframes slide-right {
+  100% {
+    transform: translateX(89%);
+  }
+}
+
+@keyframes arrow-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(180deg);
+  }
 }

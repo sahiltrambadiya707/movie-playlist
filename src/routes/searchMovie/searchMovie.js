@@ -14,6 +14,7 @@ const SearchMovie = () => {
   const [allPlaylist, setAllPlaylist] = useState([]);
   const [PlaylistId, setPlaylistId] = useState("6320b467ce6c1361308df2aa");
   const [userInfo, setUserInfo] = useState({});
+  const [popUpExit, setPopUpExit] = useState();
 
   useEffect(() => {
     getPlaylist();
@@ -64,6 +65,13 @@ const SearchMovie = () => {
         setSearch("");
       });
   };
+  const exitOnClick = () => {
+    setPopUpExit("add-to-pop-up-exit-animation");
+    setTimeout(() => {
+      setAddToPlaylist(false);
+      setPopUpExit("");
+    }, 300);
+  };
 
   return (
     <div>
@@ -107,6 +115,44 @@ const SearchMovie = () => {
               );
             })}
         </div>
+        {addToPlaylist && (
+          <div className="add-to-playlist-pop-up" id={popUpExit}>
+            <h1>Add to...</h1>
+            <hr />
+            <ol>
+              <li>
+                <label htmlFor="pOne">XYZ PLAYLIST NAME</label>{" "}
+                <input type="radio" name="playlist" id="pOne" />
+              </li>
+              <li>
+                <label htmlFor="pTwo">XYZ PLAYLIST NAME</label>{" "}
+                <input type="radio" name="playlist" id="pTwo" />
+              </li>
+              <li>
+                <label htmlFor="pThree">XYZ PLAYLIST NAME</label>{" "}
+                <input type="radio" name="playlist" id="pThree" />
+              </li>
+              <li>
+                <label htmlFor="pFour">XYZ PLAYLIST NAME</label>{" "}
+                <input type="radio" name="playlist" id="pFour" />
+              </li>
+              <li>
+                <label htmlFor="pFive">XYZ PLAYLIST NAME</label>{" "}
+                <input type="radio" name="playlist" id="pFive" />
+              </li>
+            </ol>
+            <div className="add-cancel-buttons">
+              <button
+                onClick={() => {
+                  console.log("Clicked");
+                }}
+              >
+                Add
+              </button>
+              <button onClick={() => exitOnClick()}>Cancel</button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

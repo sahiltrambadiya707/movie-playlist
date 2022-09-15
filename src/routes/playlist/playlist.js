@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { ThreeCircles } from "react-loader-spinner";
 import DataTable, { defaultThemes } from "react-data-table-component";
+import { MdArrowBackIos } from "react-icons/md";
+import { GrFormAdd } from "react-icons/gr";
 import Header from "../../components/header/header";
 import "./playlist.css";
 import Axios from "../../helpers/axios";
@@ -8,6 +10,7 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 
 const Playlist = () => {
+  const [popUp, setPopUp] = useState(false);
   const [isLoaderVisible, setIsLoaderVisible] = useState(false);
   const [playlistModel, setPlaylistModel] = useState(false);
   const [Playlist, setPlaylist] = useState([]);
@@ -191,6 +194,21 @@ const Playlist = () => {
               //   setCountPerPage(rowPerPage);
               // }}
             />
+          </div>
+        </div>
+        <div className="create-playlist-pop-up" id={`${popUp}`}>
+          <div className="arrow-icon" id={`arrow-${popUp}`}>
+            <MdArrowBackIos
+              onClick={() => {
+                setPopUp(!popUp);
+              }}
+            />
+          </div>
+          <div className="playlist-name-input">
+            <input type="text" placeholder="Playlist Name..." />
+          </div>
+          <div className="add-icon">
+            <GrFormAdd />
           </div>
         </div>
       </div>

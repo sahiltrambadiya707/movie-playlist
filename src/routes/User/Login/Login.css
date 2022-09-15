@@ -142,13 +142,18 @@
     height: 5vh;
     margin-top: 15px;
     border-radius: 5px;
-    /* background: linear-gradient(145deg, #f0f0f0, #cacaca); */
     box-shadow: 0px 0px 2px #5a5a5a;
     border: 0;
     font-size: 20px;
     color: #5a5a5a;
     cursor: pointer;
     transition: all 0.3s;
+}
+
+.login-content button:hover {
+    color: white;
+    background: #cacaca;
+    box-shadow: 1px 1px 2px #5c5c5c, -1px -1px 2px #fff;
 }
 
 .login-content button:active {
