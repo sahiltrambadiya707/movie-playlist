@@ -83,6 +83,12 @@
     transition: all 0.3s;
 }
 
+.sign-up-form-content button:hover {
+    color: white;
+    background: #cacaca;
+    box-shadow: 1px 1px 2px #5c5c5c, -1px -1px 2px #fff;
+}
+
 .sign-up-form-content button:active {
     color: black;
     border-radius: 5px;
