@@ -4,48 +4,31 @@ import DataTable, { defaultThemes } from "react-data-table-component";
 // import { Tooltip } from "bootstrap";
 import Header from "../../components/header/header";
 import "./home.css";
+import Axios from "../../helpers/axios";
+import moment from "moment";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [isLoaderVisible, setIsLoaderVisible] = useState(false);
   const [countPerPage, setCountPerPage] = useState(10);
+  const [Playlist, setPlaylist] = useState([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
 
-  // useEffect(() => {
-  //   // getAll();
-  // }, [page, countPerPage]);
-  const data = [
-    {
-      name: "sahil",
-    },
-    {
-      name: "sahil",
-    },
-    {
-      name: "sahil",
-    },
-    {
-      name: "sahil",
-    },
-    {
-      name: "sahil",
-    },
-    {
-      name: "sahil",
-    },
-    {
-      name: "sahil",
-    },
-    {
-      name: "sahil",
-    },
-    {
-      name: "sahil",
-    },
-    {
-      name: "sahil",
-    },
-  ];
+  useEffect(() => {
+    getAll();
+  }, [page, countPerPage]);
+
+  const getAll = async () => {
+    await Axios.get(`playlist/public`)
+      .then((res) => {
+        setPlaylist(res?.data?.payload?.result);
+        setCount(res?.data?.payload?.count);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const columns = [
     {
@@ -54,27 +37,33 @@ const Home = () => {
       width: "65px",
     },
     {
-      name: "name",
-      selector: (row) => row?.Name,
+      name: "Playlist Name",
+      selector: (row) => row?.playlistName,
       sortable: true,
     },
-    // {
-    //   name: "Actions",
-    //   cell: (row) => {
-    //     return (
-    //       <>
-    //         <div className="d-flex justify-content-between">
-    //           <div className="cursor-pointer pl-2" onClick={() => {}}>
-    //             <Tooltip title="View" arrow>
-    //               {/* <RemoveRedEyeIcon /> */}
-    //               eye
-    //             </Tooltip>
-    //           </div>
-    //         </div>
-    //       </>
-    //     );
-    //   },
-    // },
+    {
+      name: "Playlist CreatedBy",
+      selector: (row) => row?.playlistBy?.name,
+      sortable: true,
+    },
+    {
+      name: "Playlist Created Date",
+      selector: (row) => moment(row?.createdAt).format("DD-MM-YYYY"),
+      sortable: true,
+    },
+    {
+      name: "Actions",
+      width: "200px",
+      cell: (row) => {
+        return (
+          <>
+            <div className="d-flex justify-content-between">
+              <Link to={`/user/paylist/${row?._id}`}>View Playlist Movie</Link>
+            </div>
+          </>
+        );
+      },
+    },
   ];
 
   // Table Style
@@ -113,21 +102,19 @@ const Home = () => {
 
   return (
     <div>
-      <Header />
+      {/* <Header /> */}
       <div className="container-home-page">
         <div className="temporaray-container">
           <div className="container-content-table">
             <DataTable
               columns={columns}
-              data={data}
+              data={Playlist}
               customStyles={customStyles}
               style={{
                 marginTop: "-3rem",
               }}
               progressPending={isLoaderVisible}
-              progressComponent={
-                <ThreeCircles color="#334D52" height={30} width={30} />
-              }
+              progressComponent={<ThreeCircles color="#334D52" height={30} width={30} />}
               highlightOnHover
               pagination
               paginationServer
