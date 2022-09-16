@@ -22,7 +22,7 @@ const hostUrl = `${protocol}://${host}${port ? ":" + port : ""}/${trailUrl}/`;
 const Axios = axios.create({
   baseURL: hostUrl,
   headers: {
-    Authorization: localStorage?.getItem("token")
+    Authorization: localStorage.getItem("token")
       ? `Bearer ${JSON.parse(localStorage?.getItem("token"))}`
       : "",
   },

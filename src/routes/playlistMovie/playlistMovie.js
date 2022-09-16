@@ -6,7 +6,6 @@ import { useEffect } from "react";
 import Axios from "../../helpers/axios";
 
 const PlaylistMovie = () => {
-  // const [addToPlaylist, setAddToPlaylist] = useState(false);
   const [allMovies, setAllMovies] = useState([]);
   const { id } = useParams();
 
@@ -15,7 +14,7 @@ const PlaylistMovie = () => {
   }, []);
 
   const getMovie = async () => {
-    await Axios.get(`movie/byUser/${id}`)
+    await Axios.get(`movie/public/${id}`)
       .then((res) => {
         setAllMovies(res?.data?.payload?.result);
       })

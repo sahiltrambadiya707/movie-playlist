@@ -3,7 +3,7 @@ import { ThreeCircles } from "react-loader-spinner";
 import DataTable, { defaultThemes } from "react-data-table-component";
 import { MdArrowBackIos } from "react-icons/md";
 import { GrFormAdd } from "react-icons/gr";
-import Header from "../../components/header/header";
+// import Header from "../../components/header/header";
 import "./playlist.css";
 import Axios from "../../helpers/axios";
 import moment from "moment";
@@ -12,11 +12,14 @@ import { Link } from "react-router-dom";
 const Playlist = () => {
   const [popUp, setPopUp] = useState(false);
   const [isLoaderVisible, setIsLoaderVisible] = useState(false);
-  const [playlistModel, setPlaylistModel] = useState(false);
   const [Playlist, setPlaylist] = useState([]);
+  const [playlistName, setPlaylistName] = useState("");
 
   useEffect(() => {
     getAll();
+    return () => {
+      setPlaylistName("");
+    };
   }, []);
 
   const getAll = async () => {
@@ -29,6 +32,23 @@ const Playlist = () => {
       .catch((err) => {
         console.log(err);
         setIsLoaderVisible(false);
+      });
+  };
+
+  const handleCreate = async () => {
+    if (playlistName?.trim() === "") {
+      alert("please enter playlist name");
+      return;
+    }
+    await Axios.post(`playlist/create`, { playlistName })
+      .then((res) => {
+        setPlaylistName("");
+        setPopUp(false);
+        getAll();
+      })
+      .catch((err) => {
+        setPlaylistName("");
+        setPopUp(false);
       });
   };
 
@@ -48,15 +68,18 @@ const Playlist = () => {
   };
 
   const handleDelete = async (id) => {
-    setIsLoaderVisible(true);
-    await Axios.delete(`playlist/delete/${id}`)
-      .then((res) => {
-        getAll();
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsLoaderVisible(false);
-      });
+    const confirmBox = window.confirm("Do you really want to delete this Playlist?");
+    if (confirmBox === true) {
+      setIsLoaderVisible(true);
+      await Axios.delete(`playlist/delete/${id}`)
+        .then((res) => {
+          getAll();
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsLoaderVisible(false);
+        });
+    }
   };
 
   const columns = [
@@ -87,7 +110,34 @@ const Playlist = () => {
         return (
           <>
             <div>
-              <Link to={`/user/paylist/${row?._id}`}>View Playlist Movie</Link>
+              <Link
+                to={{
+                  pathname: `/user/paylist/${row?._id}`,
+                  state: { playlistName: row?.playlistName },
+                }}
+              >
+                View Playlist Movie
+              </Link>
+            </div>
+          </>
+        );
+      },
+    },
+    {
+      name: "Edit Playlist Movie",
+      // width: "300px",
+      cell: (row) => {
+        return (
+          <>
+            <div>
+              <Link
+                to={{
+                  pathname: `/paylist/movie/${row?._id}`,
+                  state: { playlistName: row?.playlistName },
+                }}
+              >
+                Edit Playlist Movie
+              </Link>
             </div>
           </>
         );
@@ -205,9 +255,14 @@ const Playlist = () => {
             />
           </div>
           <div className="playlist-name-input">
-            <input type="text" placeholder="Playlist Name..." />
+            <input
+              type="text"
+              placeholder="Playlist Name..."
+              onChange={(e) => setPlaylistName(e.target.value)}
+              value={playlistName}
+            />
           </div>
-          <div className="add-icon">
+          <div className="add-icon" onClick={() => handleCreate()}>
             <GrFormAdd />
           </div>
         </div>

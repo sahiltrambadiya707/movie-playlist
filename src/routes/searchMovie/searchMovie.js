@@ -6,26 +6,41 @@ import { FaPlus } from "react-icons/fa";
 import axios from "axios";
 import Axios from "../../helpers/axios";
 import { useEffect } from "react";
+import { isEmpty } from "../../helpers/utile";
 
 const SearchMovie = () => {
   const [addToPlaylist, setAddToPlaylist] = useState(false);
-  const [search, setSearch] = useState("");
+  const [userInfo, setUserInfo] = useState({});
+  const [selectdMovieData, setSelectdMovieData] = useState({});
   const [allMovies, setAllMovies] = useState([]);
   const [allPlaylist, setAllPlaylist] = useState([]);
-  const [PlaylistId, setPlaylistId] = useState("6320b467ce6c1361308df2aa");
-  const [userInfo, setUserInfo] = useState({});
+  const [PlaylistId, setPlaylistId] = useState("");
   const [popUpExit, setPopUpExit] = useState();
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     getPlaylist();
     setUserInfo(JSON.parse(localStorage.getItem("userInfo")));
+    return () => {
+      handleClose();
+    };
   }, []);
+
+  const handleClose = () => {
+    setAddToPlaylist(false);
+    setUserInfo({});
+    setSelectdMovieData({});
+    setAllMovies([]);
+    setAllPlaylist([]);
+    setPlaylistId("");
+    setSearch("");
+  };
 
   const getMovie = async (e) => {
     e.preventDefault();
     await axios
       .get(
-        `https://api.themoviedb.org/3/search/movie?&api_key=f299abb18fc11a815b1d611071582036&query=${search}`
+        `https://api.themoviedb.org/3/search/movie?api_key=f299abb18fc11a815b1d611071582036&query=${search}&include_adult=false`
       )
       .then((res) => {
         setSearch("");
@@ -47,25 +62,44 @@ const SearchMovie = () => {
       });
   };
 
-  const addMovie = async (e, movie) => {
+  const addMovie = async (e, movie, Playlist) => {
     e.preventDefault();
     const data = {
-      playlist: PlaylistId,
+      playlist: Playlist,
       movieName: movie?.title,
       moviePoster: movie?.poster_path,
       movieId: movie?.id,
     };
+
+    if (
+      isEmpty(data.playlist) ||
+      isEmpty(data.movieName) ||
+      isEmpty(data.moviePoster) ||
+      isEmpty(data.movieId)
+    ) {
+      alert("Someting Went Worng Please Try Again...!");
+      setAddToPlaylist(false);
+      setPlaylistId("");
+      setSelectdMovieData("");
+      return;
+    }
+
     await Axios.post(`movie/create`, data)
       .then((res) => {
-        setSearch("");
-        setAllMovies(res?.data?.results);
+        setAddToPlaylist(false);
+        setPlaylistId("");
+        setSelectdMovieData("");
       })
       .catch((err) => {
-        console.log(err);
-        setSearch("");
+        setAddToPlaylist(false);
+        setPlaylistId("");
+        setSelectdMovieData("");
       });
   };
+
   const exitOnClick = () => {
+    setPlaylistId("");
+    setSelectdMovieData("");
     setPopUpExit("add-to-pop-up-exit-animation");
     setTimeout(() => {
       setAddToPlaylist(false);
@@ -82,6 +116,7 @@ const SearchMovie = () => {
             <input
               type="search"
               className="search-bar"
+              placeholder="Search here..."
               onChange={(e) => setSearch(e.target.value)}
               value={search}
             />
@@ -103,7 +138,10 @@ const SearchMovie = () => {
                         <div className="add-to-playlist-button">
                           <div
                             className="switch-stars-container"
-                            onClick={(e) => addMovie(e, movie)}
+                            onClick={(e) => {
+                              setSelectdMovieData(movie);
+                              setAddToPlaylist(true);
+                            }}
                           >
                             <FaPlus />
                           </div>
@@ -120,31 +158,29 @@ const SearchMovie = () => {
             <h1>Add to...</h1>
             <hr />
             <ol>
-              <li>
-                <label htmlFor="pOne">XYZ PLAYLIST NAME</label>{" "}
-                <input type="radio" name="playlist" id="pOne" />
-              </li>
-              <li>
-                <label htmlFor="pTwo">XYZ PLAYLIST NAME</label>{" "}
-                <input type="radio" name="playlist" id="pTwo" />
-              </li>
-              <li>
-                <label htmlFor="pThree">XYZ PLAYLIST NAME</label>{" "}
-                <input type="radio" name="playlist" id="pThree" />
-              </li>
-              <li>
-                <label htmlFor="pFour">XYZ PLAYLIST NAME</label>{" "}
-                <input type="radio" name="playlist" id="pFour" />
-              </li>
-              <li>
-                <label htmlFor="pFive">XYZ PLAYLIST NAME</label>{" "}
-                <input type="radio" name="playlist" id="pFive" />
-              </li>
+              {allPlaylist?.length > 0 ? (
+                allPlaylist?.map((res, i) => {
+                  return (
+                    <li key={i}>
+                      <label htmlFor={i}>{res?.playlistName}</label>{" "}
+                      <input
+                        type="radio"
+                        name="playlist"
+                        value={res?._id}
+                        id={i}
+                        onChange={(e) => setPlaylistId(e.target.value)}
+                      />
+                    </li>
+                  );
+                })
+              ) : (
+                <div></div>
+              )}
             </ol>
             <div className="add-cancel-buttons">
               <button
-                onClick={() => {
-                  console.log("Clicked");
+                onClick={(e) => {
+                  addMovie(e, selectdMovieData, PlaylistId);
                 }}
               >
                 Add
